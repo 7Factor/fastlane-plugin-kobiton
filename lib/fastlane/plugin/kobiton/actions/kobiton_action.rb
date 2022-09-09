@@ -247,7 +247,7 @@ module Fastlane
 
       def self.output_version_id(version_id)
         Actions.lane_context[SharedValues::KOBITON_VERSION_ID] = version_id
-        ENV["KOBITON_VERSION_ID"] = version_id
+        ENV["KOBITON_VERSION_ID"] = version_id.to_s
       end
     end
   end
