@@ -3,6 +3,10 @@ require_relative '../helper/kobiton_helper'
 
 module Fastlane
   module Actions
+    module SharedValues
+      KOBITON_VERSION_ID ||= :KOBITON_VERSION_ID
+    end
+
     class KobitonAction < Action
       def self.run(params)
         require "base64"
@@ -41,6 +45,8 @@ module Fastlane
         end
 
         kobiton_notify = self.notify_kobiton_after_file_upload(app_path, filename, authorization)
+
+        self.output_version_id(kobiton_notify['versionId'])
 
         UI.message("Successfully uploaded the build to Kobiton!")
 
@@ -237,6 +243,11 @@ module Fastlane
 
           UI.user_error!("App status could not be received: #{e.response.code}, message: #{e.response.body}")
         end
+      end
+
+      def self.output_version_id(version_id)
+        Actions.lane_context[SharedValues::KOBITON_VERSION_ID] = version_id
+        ENV["KOBITON_VERSION_ID"] = version_id
       end
     end
   end
