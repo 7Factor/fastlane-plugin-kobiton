@@ -38,13 +38,15 @@ describe Fastlane::Actions::KobitonAction do
 
       stub_request(:post, "https://api.kobiton.com/v1/apps/uploadUrl").
         with(
-          body: { 'appId' => '12345', "filename" => 'app.apk' },
+          body: {
+            'appId' => '12345',
+            "filename" => 'app.apk'
+          },
           headers: {
-         'Accept' => 'application/json',
-         'Authorization' => authorization,
-         'Content-Type' => 'application/x-www-form-urlencoded',
-         'Host' => 'api.kobiton.com',
-         'User-Agent' => 'rest-client/2.1.0 (darwin21.3.0 x86_64) ruby/2.6.10p210'
+            'Accept' => 'application/json',
+            'Authorization' => authorization,
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Host' => 'api.kobiton.com'
           }
         ).
         to_return(status: 200, body: '{
@@ -56,29 +58,26 @@ describe Fastlane::Actions::KobitonAction do
         with(
           headers: {
             'Content-Type' => 'application/octet-stream',
-            'Host' => 's3_url',
-            'User-Agent' => 'rest-client/2.1.0 (darwin21.3.0 x86_64) ruby/2.6.10p210',
-            'X-Amz-Tagging' => 'unsaved=true'
+            'Host' => 's3_url'
           }
         ).
         to_return(status: 200, body: "true", headers: {})
 
       stub_request(:post, "https://api.kobiton.com/v1/apps").
         with(
-          body: { "appPath" => "kobiton_app_path", "filename" => "app.apk" },
+          body: {
+            "appPath" => "kobiton_app_path",
+            "filename" => "app.apk"
+          },
           headers: {
-         'Accept' => '*/*',
-         'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-         'Authorization' => 'Basic dXNlcm5hbWU6YXBpX2tleQ==',
-         'Content-Length' => '41',
-         'Content-Type' => 'application/x-www-form-urlencoded',
-         'Host' => 'api.kobiton.com',
-         'User-Agent' => 'rest-client/2.1.0 (darwin21.3.0 x86_64) ruby/2.6.10p210'
+            'Authorization' => authorization,
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Host' => 'api.kobiton.com'
           }
         ).
         to_return(status: 200, body: '{
-        "versionId": 12345
-      }', headers: {})
+          "versionId": 12345
+        }', headers: {})
 
       result = Fastlane::FastFile.new.parse("lane :test do
         kobiton(
