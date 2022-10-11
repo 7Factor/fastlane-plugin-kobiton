@@ -83,7 +83,7 @@ describe Fastlane::Actions::KobitonAction do
         kobiton(
           api_key: 'api_key',
           app_id: 12345,
-          file: '../spec/resources/app.apk',
+          file: '../spec/fixtures/app.apk',
           username: 'username',
         )
       end").runner.execute(:test)
