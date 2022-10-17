@@ -1,5 +1,16 @@
 require 'webmock/rspec'
 
+def run_kobiton_action
+  return Fastlane::FastFile.new.parse("lane :test do
+    kobiton(
+      api_key: 'api_key',
+      app_id: 12345,
+      file: '../spec/fixtures/app.apk',
+      username: 'username',
+    )
+  end").runner.execute(:test)
+end
+
 def mock_authorization
   base64_authorization = Base64.strict_encode64("username:api_key")
   return "Basic #{base64_authorization}"
