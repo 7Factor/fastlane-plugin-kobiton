@@ -217,11 +217,17 @@ module Fastlane
 
         begin
           RestClient.post("https://api.kobiton.com/v1/app/versions/#{version_id}/rename", JSON.generate({
-            "newName" => name
+            "newName" => self.parse_name(name)
           }), headers)
         rescue RestClient::Exception => e
           UI.user_error!("App could not be renamed, status code: #{e.response.code}, message: #{e.response.body}")
         end
+      end
+
+      def self.parse_name(name)
+        # Can contain 1 to 255 characters,
+        # alphabet, alphanumeric, space, . + _ -
+        return name[0..254].gsub(/[^a-zA-Z0-9 .+_-]/, '-')
       end
 
       def self.get_app_state(version_id, authorization)
