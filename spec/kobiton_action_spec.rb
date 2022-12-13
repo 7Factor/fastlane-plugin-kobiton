@@ -1,4 +1,6 @@
 require 'fastlane/action'
+require 'webmock/rspec'
+require 'test_helpers'
 
 describe Fastlane::Actions::KobitonAction do
   describe '#parse_name' do
@@ -21,6 +23,22 @@ describe Fastlane::Actions::KobitonAction do
       expected = 'x' * 255
 
       expect(parse_name.call(input)).to eq(expected)
+    end
+  end
+
+  describe '#run' do
+    it 'Prints all feedback messages for successful run.' do
+      expect(Fastlane::UI).to receive(:message).with("Getting S3 upload URL...")
+      expect(Fastlane::UI).to receive(:message).with("Got S3 upload URL.")
+      expect(Fastlane::UI).to receive(:message).with("Uploading the build to Amazon S3 storage...")
+      expect(Fastlane::UI).to receive(:message).with("Successfully uploaded the build to Amazon S3 storage.")
+      expect(Fastlane::UI).to receive(:message).with("Successfully uploaded the build to Kobiton!")
+
+      mock_generate_upload_url
+      mock_s3_upload
+      mock_create_application
+
+      result = run_kobiton_action
     end
   end
 end
